@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Store - 트렌디한 의류 쇼핑몰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #e74c3c;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-icons a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .profile-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e74c3c;
+        }
+
+        /* Hero Section - 회색과 주황색 배경 */
+        .hero {
+            background: linear-gradient(135deg, #6c757d 0%, #ff6b35 50%, #495057 100%);
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-top: 80px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(108, 117, 125, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 107, 53, 0.2) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* AI Fitting Images - 클로즈업 및 반투명 */
+        .ai-fitting-image {
+            position: absolute;
+            width: 250px;
+            height: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            opacity: 0.7;
+            backdrop-filter: blur(1px);
+        }
+
+        .ai-fitting-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        .ai-fitting-left {
+            left: 8%;
+            top: 15%;
+            animation: floatLeft 6s ease-in-out infinite;
+        }
+
+        .ai-fitting-left img {
+            object-position: center 20%; /* 머리와 가슴 부분 클로즈업 */
+            transform: scale(1.3);
+        }
+
+        .ai-fitting-right {
+            right: 8%;
+            top: 25%;
+            animation: floatRight 6s ease-in-out infinite reverse;
+        }
+
+        .ai-fitting-right img {
+            object-position: center 80%; /* 하체 부분 클로즈업 */
+            transform: scale(1.3);
+        }
+
+        @keyframes floatLeft {
+            0%, 100% { 
+                transform: translateY(0px) rotate(-1deg); 
+                opacity: 0.7;
+            }
+            50% { 
+                transform: translateY(-25px) rotate(1deg); 
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes floatRight {
+            0%, 100% { 
+                transform: translateY(0px) rotate(1deg); 
+                opacity: 0.7;
+            }
+            50% { 
+                transform: translateY(-20px) rotate(-1deg); 
+                opacity: 0.8;
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background: #c0392b;
+        }
+
+        /* Categories */
+        .categories {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: left;
+            margin-left: 10%;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .category-grid {
+            display: flex;
+            gap: 2rem;
+            justify-content: flex-start;
+            margin-left: 10%;
+        }
+
+        .category-card {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .category-card h3 {
+            font-size: 1.5rem;
+            color: #666;
+            transition: all 0.3s;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            background: transparent;
+        }
+
+        .category-card:hover h3 {
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .category-card.active h3 {
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            font-weight: bold;
+        }
+
+        /* Featured Products */
+        .featured-products {
+            padding: 4rem 0;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Recommended Products - Fixed Image Aspect Ratio */
+        .recommended-products {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+
+        .recommended-products .product-card {
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recommended-products .product-card img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 3/4;
+            object-fit: contain;
+            background: white;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: #2c3e50;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #34495e;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #e74c3c;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #4a5f7a;
+            color: #bdc3c7;
+        }
+
+        /* Cart */
+        .cart {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 1001;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .cart.active {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .cart-total {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
+        }
+
+        .cart-total h3 {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .cart {
+                width: 100%;
+                right: -100%;
+            }
+
+            .ai-fitting-left, .ai-fitting-right {
+                width: 180px;
+                height: 250px;
+                opacity: 0.6;
+            }
+
+            .ai-fitting-left {
+                left: 3%;
+                top: 10%;
+            }
+
+            .ai-fitting-right {
+                right: 3%;
+                top: 20%;
+            }
+
+            .category-grid {
+                margin-left: 5%;
+            }
+
+            .section-title {
+                margin-left: 5%;
+            }
+        }
+
+        /* Modal Styles for AI Try-On Analysis */
+        #modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          backdrop-filter: blur(15px);
+          background-color: rgba(0, 0, 0, 0.6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: fadeIn 0.6s ease-out;
+          z-index: 1000;
+          padding: 2rem;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .modal-content {
+          background: white;
+          border-radius: 25px;
+          padding: 2.5rem;
+          width: 95vw;
+          max-width: 1200px;
+          height: 80vh;
+          box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+          animation: popUp 0.5s ease-out;
+          position: relative;
+          display: flex;
+          gap: 0;
+          overflow: hidden;
+        }
+
+        @keyframes popUp {
+          0% { transform: scale(0.8) translateY(50px); opacity: 0; }
+          100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+          position: absolute;
+          top: 20px;
+          right: 25px;
+          font-size: 28px;
+          color: #666;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.8);
+          z-index: 10;
+        }
+
+        .close-btn:hover {
+          color: #333;
+          background: rgba(255, 255, 255, 1);
+          transform: scale(1.1);
+        }
+
+        .analysis-container {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          position: relative;
+        }
+
+        .canvas-section {
+          flex: 3;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          background: #f8f9fa;
+          border-radius: 15px;
+          overflow: hidden;
+        }
+
+        .canvas-wrapper {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        #modalCanvas {
+          max-width: 100%;
+          max-height: 100%;
+          border-radius: 10px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .labels-section {
+          flex: 3;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 0;
+          background: white;
+          padding: 2rem;
+          border-radius: 15px;
+          position: relative;
+        }
+
+        .label-item {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          opacity: 0;
+          transform: translateX(50px);
+          animation: slideInRight 0.8s ease-out forwards;
+        }
+
+        .label-item:nth-child(1) {
+          animation-delay: 1.2s;
+        }
+
+        .label-item:nth-child(2) {
+          animation-delay: 1.6s;
+        }
+
+        @keyframes slideInRight {
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .label-text {
+          font-size: 1.8rem;
+          font-weight: bold;
+          color: #333;
+          padding: 1.5rem 2rem;
+          background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+          border-radius: 15px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+          position: relative;
+          transition: all 0.3s ease;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        }
+
+        .label-text:hover {
+          transform: translateX(-10px) scale(1.05);
+          box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .upper-label {
+          color: #e74c3c;
+        }
+
+        .lower-label {
+          color: #3498db;
+        }
+
+        /* Enhanced Arrow Styles with Animations */
+        .arrow-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          z-index: 5;
+        }
+
+        .arrow-line {
+          position: absolute;
+          height: 3px;
+          border-radius: 2px;
+          transform-origin: left center;
+          opacity: 0;
+          animation: drawArrowLine 1.2s ease-out forwards;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .arrow-head {
+          position: absolute;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          opacity: 0;
+          animation: fadeInArrowHead 0.6s ease-out forwards;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .upper-arrow-line {
+          background: linear-gradient(90deg, #e74c3c, #ff6b6b);
+          animation-delay: 1.5s;
+        }
+
+        .lower-arrow-line {
+          background: linear-gradient(90deg, #3498db, #74b9ff);
+          animation-delay: 2.0s;
+        }
+
+        .upper-arrow-head {
+          border-left: 15px solid #e74c3c;
+          border-top: 8px solid transparent;
+          border-bottom: 8px solid transparent;
+          animation-delay: 2.2s;
+        }
+
+        .lower-arrow-head {
+          border-left: 15px solid #3498db;
+          border-top: 8px solid transparent;
+          border-bottom: 8px solid transparent;
+          animation-delay: 2.7s;
+        }
+
+        @keyframes drawArrowLine {
+          0% {
+            opacity: 0;
+            transform: scaleX(0);
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+
+        @keyframes fadeInArrowHead {
+          0% {
+            opacity: 0;
+            transform: scale(0) rotate(0deg);
+          }
+          50% {
+            transform: scale(1.2) rotate(5deg);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+          }
+        }
+
+        /* Pulsing animation for detected points */
+        @keyframes pulsePoint {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 0.8;
+          }
+          50% {
+            transform: scale(1.2);
+            opacity: 1;
+          }
+        }
+
+        #loadingScreen {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+        }
+
+        .spinner {
+          width: 60px;
+          height: 60px;
+          border: 6px solid #e3e3e3;
+          border-top: 6px solid #667eea;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+          color: #667eea;
+          font-size: 1.1rem;
+          font-weight: 500;
+        }
+
+        /* Make recommended product images clickable */
+        .recommended-products .product-card {
+          cursor: pointer;
+          transition: transform 0.3s ease;
+        }
+
+        .recommended-products .product-card:hover {
+          transform: scale(1.05);
+        }
+
+        /* Responsive modal */
+        @media (max-width: 1024px) {
+          .modal-content {
+            flex-direction: column;
+            height: 90vh;
+          }
+          
+          .analysis-container {
+            flex-direction: column;
+          }
+          
+          .canvas-section {
+            flex: 2;
+            margin-bottom: 1rem;
+          }
+          
+          .labels-section {
+            flex: 1;
+            flex-direction: row;
+            gap: 1rem;
+          }
+          
+          .label-item {
+            flex: 1;
+          }
+          
+          .label-text {
+            font-size: 1.4rem;
+            padding: 1rem;
+          }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <img src="/https://res.cloudinary.com/dplzmk1ex/image/upload/v1750611338/ChatGPT_Image_2025%EB%85%84_6%EC%9B%94_15%EC%9D%BC_%EC%98%A4%EC%A0%84_01_43_06_yofrkr.png" alt="Fashion Store Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">홈</a></li>
+                <li><a href="#categories">카테고리</a></li>
+                <li><a href="#products">상품</a></li>
+                <li><a href="#about">소개</a></li>
+                <li><a href="#contact">연락처</a></li>
+            </ul>
+            <div class="nav-icons">
+                <a href="/cart" id="cart-link">
+                    🛒 
+                    <% if (typeof cartCount !== 'undefined' && cartCount > 0) { %>
+                        <span class="cart-count"><%= cartCount %></span>
+                    <% } %>
+                </a>
+                <a href="/mypage">
+                    👤
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- AI Fitting Images -->
+        <% if (typeof ai_image !== 'undefined' && ai_image && ai_image.length >= 2) { %>
+        <div class="ai-fitting-container">
+            <div class="ai-fitting-image ai-fitting-left">
+                <img src="<%= ai_image[0] %>" alt="상의 피팅 이미지">
+            </div>
+            <div class="ai-fitting-image ai-fitting-right">
+                <img src="<%= ai_image[1] %>" alt="하의 피팅 이미지">
+            </div>
+        </div>
+        <% } %>
+        
+        <div class="hero-content">
+            <h1>최신 패션 트렌드</h1>
+            <p>스타일리시하고 편안한 의류를 만나보세요</p>
+            <a href="#products" class="btn">쇼핑하기</a>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <h2 class="section-title">카테고리</h2>
+            <div class="category-grid">
+                <div class="category-card" id="top-category" onclick="filterProducts('상의')">
+                    <h3>상의</h3>
+                </div>
+                <div class="category-card" id="bottom-category" onclick="filterProducts('하의')">
+                    <h3>하의</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products" id="products">
+        <div class="container">
+            <h2 class="section-title">인기 상품</h2>
+            <div class="product-grid" id="product-grid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 추천 상품 EJS 서버 렌더링 방식 -->
+    <%
+    const shirts = recommended.filter(p => p.type === 'shirt').slice(0, 2);
+    const pants = recommended.filter(p => p.type === 'pants').slice(0, 2);
+    const gridItems = [...shirts, ...pants];
+
+    const ai_images = ai_image || []; // ✅ 서버에서 받은 ai_image 배열 사용
+    %>
+
+    <% if (ai_images.length > 0) { %>
+    <section class="recommended-products">
+        <div class="container">
+            <h2 class="section-title">회원님을 위한 추천 상품</h2>
+        <div class="product-grid" style="grid-template-columns: repeat(2, 1fr);">
+            <% ai_images.forEach(function(imgUrl, index) { %>
+                <div class="product-card" onclick="openModal('<%= imgUrl %>', <%= index %>)">
+                    <img src="<%= imgUrl %>" alt="AI 피팅 이미지">
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</section>
+    <% } %>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>뉴스레터 구독</h2>
+            <p>최신 패션 트렌드와 특별 할인 정보를 받아보세요</p>
+            <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                <input type="email" placeholder="이메일 주소를 입력하세요" required>
+                <button type="submit" class="btn">구독하기</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>고객 서비스</h3>
+                    <ul>
+                        <li><a href="#">자주 묻는 질문</a></li>
+                        <li><a href="#">배송 정보</a></li>
+                        <li><a href="#">반품/교환</a></li>
+                        <li><a href="#">사이즈 가이드</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>회사 정보</h3>
+                    <ul>
+                        <li><a href="#">회사 소개</a></li>
+                        <li><a href="#">채용 정보</a></li>
+                        <li><a href="#">이용약관</a></li>
+                        <li><a href="#">개인정보처리방침</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>연락처</h3>
+                    <ul>
+                        <li>📞 1588-1234</li>
+                        <li>📧 info@fashionstore.com</li>
+                        <li>📍 서울시 강남구 테헤란로 123</li>
+                        <li>🕒 평일 09:00 - 18:00</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>소셜 미디어</h3>
+                    <ul>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">YouTube</a></li>
+                        <li><a href="#">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Fashion Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart -->
+    <div class="cart" id="cart">
+        <div class="cart-header">
+            <h2>장바구니</h2>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        <div id="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-total">
+            <h3>총 금액: <span id="cart-total">0원</span></h3>
+            <button class="btn" style="width: 100%; margin-top: 1rem;" onclick="checkout()">결제하기</button>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="display: none;">
+      <div class="spinner"></div>
+      <div class="loading-text">AI가 분석 중입니다...</div>
+    </div>
+
+    <!-- Modal for AI Try-On Analysis -->
+    <div id="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="arrow-overlay" id="arrowOverlay"></div>
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="analysis-container">
+        <div class="canvas-section">
+            <div class="canvas-wrapper">
+            <img id="sourceImg" style="display:none;" crossorigin="anonymous">
+            <canvas id="modalCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- 상의 / 하의 텍스트 + 이름 + 가격 표시 영역 -->
+        <div class="labels-section">
+        <% if (shirts[0]) { %>
+        <div class="label-item">
+            <div class="label-text upper-label" id="upperLabel" style="cursor: pointer;"
+                onclick="goToDetailFromModal(<%= shirts[0].id %>)">
+            👕 상의: <%= shirts[0].name %> (<%= Number(shirts[0].price).toLocaleString() %>원)
+            </div>
+        </div>
+        <% } %>
+
+        <% if (pants[0]) { %>
+            <div class="label-item">
+            <div class="label-text lower-label" id="lowerLabel" style="cursor: pointer;"
+                onclick="goToDetailFromModal(<%= pants[0].id %>)">
+                👖 하의: <%= pants[0].name %> (<%= Number(pants[0].price).toLocaleString() %>원)
+            </div>
+            </div>
+        <% } %>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+        // Sample product data
+        let products = []; // 전역에서 사용할 DB 기반 상품 목록
+        let cart = [];
+        let currentFilter = 'all';
+
+        // 상품 로드 함수
+        async function loadProducts(filter = 'all') {
+            const productGrid = document.getElementById('product-grid');
+            try {
+                const res = await fetch('/api/v1/cloth');
+                products = await res.json();
+
+                // 콘솔에 cloth 테이블 데이터 출력
+                console.log('cloth 테이블에서 받아온 상품 데이터:', products);
+
+                // type으로 필터링 (shirt/pants)
+                const filteredProducts = filter === 'all' 
+                    ? products 
+                    : products.filter(p => p.type === filter);
+
+                productGrid.innerHTML = filteredProducts.map(product => `
+                    <div class="product-card" onclick="goToDetail(${product.id})" style="cursor:pointer;">
+                        <img src="${product.image_url}" alt="${product.name}">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <div class="product-price">
+                                ${Number(product.price).toLocaleString()}원
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                productGrid.innerHTML = '<p>상품을 불러오는 데 실패했습니다.</p>';
+                console.error(err);
+            }
+        }
+
+        // Filter products
+        function filterProducts(category) {
+            // 카테고리 버튼 상태 업데이트
+            const topCategory = document.getElementById('top-category');
+            const bottomCategory = document.getElementById('bottom-category');
+            
+            // 모든 카테고리 버튼 초기화
+            topCategory.classList.remove('active');
+            bottomCategory.classList.remove('active');
+            
+            // 카테고리 매핑 (한국어 -> 영어)
+            const categoryMap = {
+                '상의': 'shirt',
+                '하의': 'pants'
+            };
+            
+            const dbCategory = categoryMap[category];
+            
+            if (currentFilter === category) {
+                // 같은 카테고리를 다시 클릭하면 전체 보기
+                currentFilter = 'all';
+                loadProducts('all');
+            } else {
+                // 새로운 카테고리 선택
+                currentFilter = category;
+                loadProducts(dbCategory); // DB의 실제 type 값 사용
+                
+                // 선택된 카테고리 버튼 활성화
+                if (category === '상의') {
+                    topCategory.classList.add('active');
+                } else if (category === '하의') {
+                    bottomCategory.classList.add('active');
+                }
+            }
+        }
+
+        // 장바구니 개수 업데이트
+        async function updateCartCount() {
+            try {
+                const response = await fetch('/api/v1/cart-count');
+                if (response.ok) {
+                    const data = await response.json();
+                    const cartLink = document.getElementById('cart-link');
+                    
+                    // 기존 cart-count 제거
+                    const existingCount = cartLink.querySelector('.cart-count');
+                    if (existingCount) {
+                        existingCount.remove();
+                    }
+                    
+                    // 새로운 cart-count 추가
+                    if (typeof data.count !== 'undefined' && data.count > 0) {
+                        const countSpan = document.createElement('span');
+                        countSpan.className = 'cart-count';
+                        countSpan.textContent = data.count;
+                        cartLink.appendChild(countSpan);
+                    }
+                }
+            } catch (error) {
+                console.error('장바구니 개수 조회 오류:', error);
+            }
+        }
+
+        // Toggle cart
+        function toggleCart() {
+            const cartElement = document.getElementById('cart');
+            cartElement.classList.toggle('active');
+        }
+
+        // Newsletter subscription
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            alert(`뉴스레터 구독이 완료되었습니다! (${email})`);
+            event.target.reset();
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) {
+                alert('장바구니가 비어있습니다.');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            alert(`결제 금액: ${total.toLocaleString()}원\n결제 페이지로 이동합니다.`);
+            cart = [];
+            updateCartUI();
+            toggleCart();
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 상세 페이지 이동 함수 추가
+        function goToDetail(itemId) {
+            // form 생성
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/api/v1/detail';
+
+            // itemId input 추가
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'itemId';
+            input.value = itemId;
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // Modal functionality for AI Try-On Analysis
+        let upperPoint = null;
+        let lowerPoint = null;
+        let pose = null;
+
+        // Initialize MediaPipe Pose when needed
+        function initializePose() {
+          if (typeof Pose === 'undefined') {
+            // Load MediaPipe scripts dynamically
+            const script1 = document.createElement('script');
+            script1.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/pose';
+            document.head.appendChild(script1);
+            
+            const script2 = document.createElement('script');
+            script2.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils';
+            document.head.appendChild(script2);
+            
+            script1.onload = () => {
+              setupPose();
+            };
+          } else {
+            setupPose();
+          }
+        }
+
+        function setupPose() {
+          pose = new Pose({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+          });
+          pose.setOptions({ modelComplexity: 1, smoothLandmarks: true });
+          
+          pose.onResults((results) => {
+            const canvas = document.getElementById('modalCanvas');
+            const ctx = canvas.getContext('2d');
+            const img = document.getElementById('sourceImg');
+            
+            const maxWidth = 400;
+            const aspect = img.naturalWidth / img.naturalHeight;
+            canvas.width = maxWidth;
+            canvas.height = maxWidth / aspect;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            const lm = results.poseLandmarks;
+            if (!lm) return;
+
+            const scaleX = canvas.width;
+            const scaleY = canvas.height;
+
+            const topX = ((lm[11].x + lm[12].x) / 2) * scaleX;
+            const topY = ((lm[11].y + lm[12].y) / 2) * scaleY;
+            const bottomX = ((lm[23].x + lm[24].x) / 2) * scaleX;
+            const bottomY = ((lm[25].y + lm[26].y) / 2) * scaleY;
+
+            upperPoint = { x: topX, y: topY };
+            lowerPoint = { x: bottomX, y: bottomY };
+
+            // Draw upper point with pulsing animation
+            ctx.shadowColor = 'rgba(231, 76, 60, 0.6)';
+            ctx.shadowBlur = 15;
+            ctx.fillStyle = "#e74c3c";
+            ctx.beginPath();
+            ctx.arc(topX, topY, 10, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.shadowColor = 'transparent';
+            ctx.fillStyle = "#fff";
+            ctx.beginPath();
+            ctx.arc(topX, topY, 4, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Draw lower point with pulsing animation
+            ctx.shadowColor = 'rgba(52, 152, 219, 0.6)';
+            ctx.shadowBlur = 15;
+            ctx.fillStyle = "#3498db";
+            ctx.beginPath();
+            ctx.arc(bottomX, bottomY, 10, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.shadowColor = 'transparent';
+            ctx.fillStyle = "#fff";
+            ctx.beginPath();
+            ctx.arc(bottomX, bottomY, 4, 0, 2 * Math.PI);
+            ctx.fill();
+
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+
+        
+
+            document.getElementById('loadingScreen').style.display = 'none';
+          });
+        }
+
+        function openModal(imageUrl, index) {
+          document.getElementById('loadingScreen').style.display = 'flex';
+          document.getElementById('modal').style.display = 'flex';
+          
+          const img = document.getElementById('sourceImg');
+          img.src = imageUrl;
+          
+          if (!pose) {
+            initializePose();
+          }
+          
+          img.onload = () => {
+            if (pose) {
+              pose.send({ image: img });
+            }
+          };
+        }
+
+        function closeModal() {
+          document.getElementById('modal').style.display = 'none';
+          document.getElementById('loadingScreen').style.display = 'none';
+          
+          // Reset points
+          upperPoint = null;
+          lowerPoint = null;
+          
+          // Clear arrows
+          const arrowOverlay = document.getElementById('arrowOverlay');
+          if (arrowOverlay) {
+            arrowOverlay.innerHTML = '';
+          }
+        }
+
+        
+        function createArrowPath(startX, startY, endX, endY, color, className) {
+        const arrowOverlay = document.getElementById('arrowOverlay');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+        const midX = (startX + endX) / 2;
+
+        const d = `M${startX},${startY} C${midX},${startY} ${midX},${endY} ${endX},${endY}`;
+
+        path.setAttribute('d', d);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '3');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('class', className);
+
+        arrowOverlay.appendChild(path);
+        }
+
+        function drawConnectingArrows() {
+        const modalRect = document.querySelector('.modal-content').getBoundingClientRect();
+        const canvas = document.getElementById('modalCanvas');
+        const canvasRect = canvas.getBoundingClientRect();
+        const upperLabelRect = document.getElementById('upperLabel').getBoundingClientRect();
+        const lowerLabelRect = document.getElementById('lowerLabel').getBoundingClientRect();
+
+        // 상의와 하의의 위치를 추정 (이미지 상단과 하단의 중앙)
+        const img = document.getElementById('sourceImg');
+        const imgRect = img.getBoundingClientRect();
+        const upperStartX = imgRect.left + imgRect.width / 2 - modalRect.left;
+        const upperStartY = imgRect.top + imgRect.height * 0.25 - modalRect.top;
+        const lowerStartX = imgRect.left + imgRect.width / 2 - modalRect.left;
+        const lowerStartY = imgRect.top + imgRect.height * 0.75 - modalRect.top;
+
+        const upperEndX = upperLabelRect.left - modalRect.left;
+        const upperEndY = upperLabelRect.top + upperLabelRect.height / 2 - modalRect.top;
+        const lowerEndX = lowerLabelRect.left - modalRect.left;
+        const lowerEndY = lowerLabelRect.top + lowerLabelRect.height / 2 - modalRect.top;
+
+        const arrowOverlay = document.getElementById('arrowOverlay');
+        arrowOverlay.innerHTML = '';
+
+        // Ensure SVG element exists
+        let svg = document.getElementById('arrowSvg');
+        if (!svg) {
+            svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('id', 'arrowSvg');
+            svg.style.position = 'absolute';
+            svg.style.top = '0';
+            svg.style.left = '0';
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+            arrowOverlay.appendChild(svg);
+        }
+        svg.innerHTML = '';
+
+        // Use curved arrows
+        const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const midX1 = (upperStartX + upperEndX) / 2;
+        const d1 = `M${upperStartX},${upperStartY} C${midX1},${upperStartY} ${midX1},${upperEndY} ${upperEndX},${upperEndY}`;
+        path1.setAttribute('d', d1);
+        path1.setAttribute('stroke', '#e74c3c');
+        path1.setAttribute('stroke-width', '3');
+        path1.setAttribute('fill', 'none');
+        svg.appendChild(path1);
+
+        const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const midX2 = (lowerStartX + lowerEndX) / 2;
+        const d2 = `M${lowerStartX},${lowerStartY} C${midX2},${lowerStartY} ${midX2},${lowerEndY} ${lowerEndX},${lowerEndY}`;
+        path2.setAttribute('d', d2);
+        path2.setAttribute('stroke', '#3498db');
+        path2.setAttribute('stroke-width', '3');
+        path2.setAttribute('fill', 'none');
+        svg.appendChild(path2);
+        }
+
+        function goToDetailFromModal(itemId) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/api/v1/detail';
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'itemId';
+            input.value = itemId;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            closeModal();
+          }
+        });
+
+        
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            updateCartCount(); // 장바구니 개수 초기화
+        });
+    </script>
+</body>
+</html>
